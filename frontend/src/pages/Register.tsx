@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Register = () => {
   return (
     <>
       {/* මුළු පිටුවම ආවරණය වෙන ප්‍රධාන ඩිව් එක */}
@@ -10,11 +10,24 @@ const Login = () => {
         {/* මැද තියෙන Login Card එක */}
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-700">
           <h2 className="text-3xl font-bold text-center text-white mb-6">
-            Welcome Back
+            Create an Account
           </h2>
           
           {/* ෆෝම් එක මෙතනින් පටන් ගන්නේ */}
           <form className="flex flex-col gap-5">
+
+            {/* Email එක ගහන තැන */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                Full Name
+              </label>
+
+              <input 
+                type="text" 
+                placeholder="John Doe" 
+                className="w-full bg-gray-900 text-white px-4 py-3 rounded-lg outline-none border border-gray-700 focus:border-blue-500 transition-colors"
+              />
+            </div>
             
             {/* Email එක ගහන තැන */}
             <div>
@@ -42,17 +55,17 @@ const Login = () => {
               />
             </div>
 
-            {/* Login බොත්තම */}
+            {/* Sign Up බොත්තම */}
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg mt-2 transition-colors cursor-pointer">
-              Sign In
+              Sign Up
             </button>
 
           </form>
 
           <p className="text-center text-gray-400 text-sm mt-6">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <span className="text-blue-500 hover:text-blue-400 cursor-pointer">
-              <Link to="/register" className="text-blue-500 hover:text-blue-400">Sign up</Link>
+              <Link to="/login" className="text-blue-500 hover:text-blue-400">Sign in</Link>
             </span>
           </p>
         </div>
@@ -62,4 +75,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register
