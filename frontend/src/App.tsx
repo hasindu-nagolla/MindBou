@@ -1,11 +1,10 @@
-import React, { Profiler } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import ArticleView from './pages/ArticleView'
 import Write from './pages/Write'
-import Register from './pages/register'
+import Register from './pages/Register'
 import Profile from './pages/Profile'
 
 const App = () => {
