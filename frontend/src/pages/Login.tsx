@@ -1,7 +1,51 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, {useContext} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import {AuthContext} from "../context/AuthContext";
 
 const Login = () => {
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent page refresh
+    setError("");
+
+    if(!email || !password){
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try{
+      // send data to the backend server through fetch API
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      const data = await response.json();
+
+      if(response.ok){
+        auth?.login(data.token, { _id: data._id, name: data.username, email: data.email });
+        navigate('/');
+        setEmail("");
+        setPassword("");
+      } else{
+        setError(data.message || "Login failed.");
+
+      }
+    }catch(err){
+      setError("An error occurred while logging in. Please try again.");
+    }
+  }
+
   return (
     <>
       {/* මුළු පිටුවම ආවරණය වෙන ප්‍රධාන ඩිව් එක */}
@@ -12,9 +56,11 @@ const Login = () => {
           <h2 className="text-3xl font-bold text-center text-white mb-6">
             Welcome Back
           </h2>
+
+          {error && <div className="bg-red-500 text-white p-3 rounded mb-4 text-sm text-center">{error}</div>}
           
           {/* ෆෝම් එක මෙතනින් පටන් ගන්නේ */}
-          <form className="flex flex-col gap-5">
+          <form onSubmit={handleLogin} className="flex flex-col gap-5">
             
             {/* Email එක ගහන තැන */}
             <div>
@@ -24,6 +70,8 @@ const Login = () => {
 
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com" 
                 className="w-full bg-gray-900 text-white px-4 py-3 rounded-lg outline-none border border-gray-700 focus:border-blue-500 transition-colors"
               />
@@ -37,6 +85,8 @@ const Login = () => {
 
               <input 
                 type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••" 
                 className="w-full bg-gray-900 text-white px-4 py-3 rounded-lg outline-none border border-gray-700 focus:border-blue-500 transition-colors"
               />
