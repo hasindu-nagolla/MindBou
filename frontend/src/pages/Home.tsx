@@ -60,7 +60,7 @@ const Home = () => {
             >
               <div>
                 {/*Category එක වෙනුවට අපි ලියපු කෙනාගේ (Author) නම පෙන්නනවා*/}
-                <span className="text-blue-400 text-sm font-semibold">{article.author?.name}</span>
+                <span className="text-blue-400 text-sm font-semibold">{article.author?.username}</span>
                 <h3 className="text-xl font-bold mt-2 mb-3">{article.title}</h3>
 
                 <p className="text-gray-400 text-sm mb-4">

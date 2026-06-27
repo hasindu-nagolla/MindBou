@@ -37,7 +37,7 @@ export const getArticles = async (req: Request, res: Response): Promise<void> =>
         // pull all articles from DB
         // .populate('author', 'name email') is used to get the author details (name and email) from the User model
         // .sort({createdAt: -1}) is used to sort the articles by createdAt in descending order (newest first)
-       const articles = await Article.find().populate('author', 'name email').sort({createdAt: -1});
+       const articles = await Article.find().populate('author', 'username email').sort({createdAt: -1});
        res.status(200).json(articles);
     }catch(error){
         res.status(500).json({message: 'Server error while fetching articles'});
@@ -48,7 +48,7 @@ export const getArticles = async (req: Request, res: Response): Promise<void> =>
 export const getArticleById = async (req: Request, res: Response): Promise<void> => {
     try{
         //  find article using id in browser url (req.params.id) and populate author details (name and email) from User model
-        const article = await Article.findById(req.params.id).populate('author', 'name email');
+        const article = await Article.findById(req.params.id).populate('author', 'username email');
         if (!article){
             res.status(404).json({ message: 'Article not found' });
             return;
