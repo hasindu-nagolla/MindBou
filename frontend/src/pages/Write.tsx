@@ -1,15 +1,51 @@
-import React, {useState} from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Write = () => {
 
   const [title, setTitle] = useState("");
-  const [content, setContent]= useState("");
+  const [content, setContent] = useState("");
+
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handlePublish = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!title || !content) {
+      alert("Plese write something before publishing...");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${auth?.token}`
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      if (response.ok) {
+        alert("Article Published Successfully! 🎉");
+        navigate("/");
+      } else {
+        alert("Failed to publish article.");
+      }
+    } catch (err) {
+      alert("server errror");
+    }
+  }
+
+
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6">
       {/* Publish බොත්තම (දකුණු පැත්තට වෙන්න තියෙනවා) */}
       <div className="flex justify-end mb-8">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors cursor-pointer">
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors cursor-pointer" onClick={handlePublish}>
           Publish Article
         </button>
       </div>

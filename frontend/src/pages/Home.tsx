@@ -1,27 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  const dummyArticles = [
-    {
-      id: 1,
-      title: "Getting Started with React",
-      category: "Technology",
-      readTime: "5 min",
-    },
-    {
-      id: 2,
-      title: "The Art of Writing",
-      category: "Lifestyle",
-      readTime: "3 min",
-    },
-    {
-      id: 3,
-      title: "Why Tailwind CSS is Awesome",
-      category: "Programming",
-      readTime: "6 min",
-    },
-  ];
+
+  const [articles, setArticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try{
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/articles`);
+        const data = await response.json();
+
+        if (response.ok){
+          setArticles(data);
+        }
+      }catch(err){
+        console.log("error ftching artcls")
+      }
+    };
+
+    fetchArticles();
+  }, [])
+
 
   return (
     <div className="max-w-4xl mx-auto mt-10">
@@ -46,28 +46,34 @@ const Home = () => {
         </Link>
       </div>
 
-      {/* Dummy Articles List */}
+      {/* Articles List */}
       <div className="mt-16 mb-10">
         <h2 className="text-2xl font-bold mb-6 border-b border-gray-700 pb-2">
           Latest Articles
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* මෙතනට තමයි අපි අර ලිපි ටික දාන්නේ */}
-          {dummyArticles.map((article) => (
+          {articles.map((article) => (
             <div
-              key={article.id}
-              className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors cursor-pointer"
+              key={article._id}
+              className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors flex flex-col justify-between"
             >
-              <span className="text-blue-400 text-sm font-semibold">{article.category}</span>
-              <h3 className="text-xl font-bold mt-2 mb-3">{article.title}</h3>
-              <p className="text-gray-400 text-sm mb-4">{article.readTime} read</p>
+              <div>
+                {/*Category එක වෙනුවට අපි ලියපු කෙනාගේ (Author) නම පෙන්නනවා*/}
+                <span className="text-blue-400 text-sm font-semibold">{article.author?.name}</span>
+                <h3 className="text-xl font-bold mt-2 mb-3">{article.title}</h3>
+
+                <p className="text-gray-400 text-sm mb-4">
+                  {article.content ? article.content.substring(0, 60): ""}...
+                </p>
 
               <Link
-                to={`/article/${article.id}`}
-                className="text-blue-500 hover:text-blue-400 text-sm font-bold"
+                to={`/article/${article._id}`}
+                className="text-blue-500 hover:text-blue-400 text-sm font-bold mt-4 inline-block"
               >
                 Read More →
               </Link>
+            </div>
             </div>
           ))}
         </div>
