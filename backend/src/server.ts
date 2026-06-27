@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
+import articleRoutes from "./routes/artticleRoutes"
 
 // get environment variables from .env file
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors());
 // parse JSON request bodies
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/articles', articleRoutes);
 
 // Connect to MongoDB using Mongoose
 mongoose

@@ -1,9 +1,9 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import Article from "../models/Article";
 import { AuthRequest } from "../middleware/authMiddleware"; // use AuthRequest to get user info from token
 
 // Create a new article
-import const createArticle = async (req: AuthRequest, res: Response): Promise<void> => {
+export const createArticle = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         // get title and content from request body (frontend)
         const { title, content } = req.body;
@@ -31,3 +31,30 @@ import const createArticle = async (req: AuthRequest, res: Response): Promise<vo
 
 }
 
+// function for getting all articles to display in the frontend
+export const getArticles = async (req: Request, res: Response): Promise<void> => {
+    try{
+        // pull all articles from DB
+        // .populate('author', 'name email') is used to get the author details (name and email) from the User model
+        // .sort({createdAt: -1}) is used to sort the articles by createdAt in descending order (newest first)
+       const articles = await Article.find().populate('author', 'name email').sort({createdAt: -1});
+       res.status(200).json(articles);
+    }catch(error){
+        res.status(500).json({message: 'Server error while fetching articles'});
+    }
+}
+
+// func for get one article (after click on a article)
+export const getArticleById = async (req: Request, res: Response): Promise<void> => {
+    try{
+        //  find article using id in browser url (req.params.id) and populate author details (name and email) from User model
+        const article = await Article.findById(req.params.id).populate('author', 'name email');
+        if (!article){
+            res.status(404).json({ message: 'Article not found' });
+            return;
+        }
+        res.status(200).json(article);
+    }catch(error){
+        res.status(500).json({ message: 'Server error while fetching the article' });
+    }
+}

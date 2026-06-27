@@ -1,6 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 
 const Write = () => {
+
+  const [title, setTitle] = useState("");
+  const [content, setContent]= useState("");
+
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6">
       {/* Publish බොත්තම (දකුණු පැත්තට වෙන්න තියෙනවා) */}
@@ -17,12 +21,14 @@ const Write = () => {
           placeholder="Title..."
           className="text-5xl font-bold bg-transparent outline-none text-white placeholder-gray-600 border-l-4 border-transparent focus:border-gray-500 pl-4 transition-colors"
           autoFocus
+          value={title} onChange={(e) => setTitle(e.target.value)}
         />
 
         {/* ලිපිය ලියන තැන */}
         <textarea
           placeholder="Tell your story..."
           className="text-xl bg-transparent outline-none text-gray-300 placeholder-gray-600 min-h-[500px] resize-none mt-4 leading-relaxed"
+          value={content} onChange={(e) => setContent(e.target.value)}
         ></textarea>
       </form>
     </div>
